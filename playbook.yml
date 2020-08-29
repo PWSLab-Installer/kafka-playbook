@@ -1,0 +1,68 @@
+- hosts: localhost
+  connection: local
+
+  vars:
+    kafka_version: 2.6.0
+  tasks:
+      
+    -   name: Check the version of OS
+        command: hostnamectl
+        register: os_check
+        ignore_errors: yes  
+
+    -   name: Install Role Java
+        local_action: command ansible-galaxy install -f geerlingguy.java 
+
+    -   name: Fetch Kafka Role
+        git:
+          repo: https://ro:-AzK1d4Yw2qbZcdoP2Ax@pwslab.org/ansible/kafka-playbook.git
+          dest: /root/.ansible/roles/pwslab.kafka
+          version: master
+          force: yes
+
+    -   name: Check if Java is already installed
+        stat: path=/usr/sbin/jdk
+        register: jdk_exists
+
+    -   name: Applying role Java
+        command: mv ~/.ansible/roles/geerlingguy.java ~/.ansible/roles/pwslab.java
+        when: not jdk_exists.stat.exists
+        ignore_errors: yes
+
+    -   name: Installing Java
+        include_role:
+            name: pwslab.java
+        when: 
+            - os_check.stdout | regex_search("CentOS Linux 7")
+            - not os_check.stdout | regex_search("CentOS Linux 8")
+        vars:
+            java_packages:
+                - java-11-openjdk
+
+    -   name: Remove Old Java Any
+        yum:
+            name: java*
+            state: absent
+        when: 
+            - os_check.stdout | regex_search("CentOS Linux 8")
+
+    -   name: Install Java 11
+        yum:
+            name: java-11-openjdk-devel
+            state: latest
+        when: 
+            - os_check.stdout | regex_search("CentOS Linux 8")
+
+    -   name: Installing Java
+        include_role:
+            name: pwslab.java
+        when: 
+            - os_check.stdout | regex_search("Ubuntu")
+
+
+    -   name: Installing Kafka
+        include_role:
+              name: pwslab.kafka
+    
+
+    
