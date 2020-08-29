@@ -35,8 +35,8 @@
         become: yes
         become_user: kafka
         unarchive:
-            src: ~/Downloads/kafka.tgz
-            dest: ~/kafka
+            src: /home/kafka/Downloads/kafka.tgz
+            dest: /home/kafka/kafka
             extra_opts: "--strip 1"
 
     -   name: Enable Topic Deletion
