@@ -49,15 +49,15 @@
             state: present
     
     -   name: Sets systemd Zookeeper service
-        become: yes
-        become_user: kafka
+        # become: yes
+        # become_user: kafka
         template:
             src: "zookeeper.service.j2"
             dest: "/etc/systemd/system/zookeeper.service"
     
     -   name: Sets systemd kafka service
-        become: yes
-        become_user: kafka
+        # become: yes
+        # become_user: kafka
         template:
             src: "kafka.service.j2"
             dest: "/etc/systemd/system/kafka.service"
