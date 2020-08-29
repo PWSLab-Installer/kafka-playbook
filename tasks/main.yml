@@ -19,6 +19,7 @@
         become_user: kafka
         file:
             path: "{{ item }}"
+            state: directory
         loop:
             - ~/kafka
             - ~/Downloads
