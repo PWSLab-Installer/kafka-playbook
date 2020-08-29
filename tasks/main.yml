@@ -5,7 +5,7 @@
             name: kafka
             shell: /bin/bash
             create_home: yes
-            password: "{{ kafka | password_hash('sha512') }}"
+            password: "{{ kafka_user_pass | password_hash('sha512') }}"
             # append: yes
 
     -   name: Add Kafaka to Sudoers

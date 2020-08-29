@@ -3,6 +3,7 @@
 
   vars:
     kafka_version: 2.6.0
+    kafka_user_pass: kafka
   tasks:
       
     -   name: Check the version of OS
